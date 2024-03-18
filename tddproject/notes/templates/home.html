@@ -2,8 +2,14 @@
     <title>Notes</title>
     <body>
         <h1>Notes App</h1>
-        <input id="id_new_item" placeholder="Enter a to-do item" />
+        <form method="POST">
+          <input name="item_text" id="id_new_item" placeholder="Enter a Notes item" />
+          {% csrf_token %}
+        </form>
         <table id="id_list_table">
-        </table>
+            {% for item in items %}
+                <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
+            {% endfor %}
+          </table>
     </body>
 </html>
