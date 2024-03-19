@@ -13,4 +13,4 @@ jobs:
                 python-version: '3.8'
 
             - name: Run Script
-              run: python3 tddproject/automation/display.py    
+              run: python3 automation/display.py    
