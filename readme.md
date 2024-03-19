@@ -1,2 +1,2 @@
 TDD Django Tutorial
-Github actions test..
+Github actions python script test
