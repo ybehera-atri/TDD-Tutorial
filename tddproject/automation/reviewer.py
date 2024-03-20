@@ -13,7 +13,7 @@ def check_update_reviewer(repo, pr, token):
 
     reviewers_check = requests.get(base_api+reviewer_api, headers=headers)
     
-    print(reviewers_check.json)
+    print(reviewers_check.json())
     
     
 
