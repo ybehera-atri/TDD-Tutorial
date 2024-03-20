@@ -11,9 +11,17 @@ def check_update_reviewer(repo, pr, token):
 
     headers = {"Authorization": f"token {token}", "Accept": "application/vnd.github+json"}
 
-    reviewers_check = requests.get(base_api+reviewer_api, headers=headers)
+    try:
+
+        reviewers_check = requests.get(base_api+reviewer_api, headers=headers).json()
+        reviewers_requested = reviewers_check['users']
+        print(reviewers_requested)
+
+    except Exception as e:
+
+        print(f'Exception occurred with error {e}')    
     
-    print(reviewers_check.json())
+    
     
     
 
