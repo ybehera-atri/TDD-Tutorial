@@ -37,7 +37,7 @@ def check_update_reviewer(repo, pr, token):
 
         reviewer_request = requests.post(base_url + reviewer_api, headers=headers, data=json.dumps(reviewers))
 
-        print(reviewer_request.content)
+        print(f'{reviewer_request.content} and Status Code is {reviewer_request.status_code}')
 
     except Exception as e:
 
