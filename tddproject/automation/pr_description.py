@@ -16,9 +16,9 @@ def fetch_update_pr(repo, pr, token):
 
     response = requests.get(base_url + commits_pr_api, headers=headers).json()
 
-    print(f"The status code {response.status_code}")
+    #print(f"The status code {response.status_code}")
 
-    for commits_message in response:
+    for commits_message in response['message']:
         print(f"The messages are {commits_message}")
 
 
