@@ -7,7 +7,6 @@ import json
 
 
 def fetch_update_pr(repo, pr, token):
-
     repository = repo
     pull_num = pr
     base_url = f"https://api.github.com/repos/"
@@ -15,9 +14,12 @@ def fetch_update_pr(repo, pr, token):
 
     headers = {f"Authorization": f"token {token}", f"Accept": f"application/vnd.github+json"}
 
-    response = requests.get(base_url+commits_pr_api, headers=headers)
+    response = requests.get(base_url + commits_pr_api, headers=headers).json()
 
-    print(f"The status code {response.status_code} with output {response.json()}")
+    print(f"The status code {response.status_code}")
+
+    for commits_message in response:
+        print(f"The messages are {commits_message}")
 
 
 # call the function with environment variables from yaml as parameters
