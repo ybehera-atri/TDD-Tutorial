@@ -1,3 +1,6 @@
+# Automation code to request reviewers when a PR is submitted
+# Gets triggered automatically on PR to feature branch
+
 import requests
 import os
 import json
@@ -43,7 +46,6 @@ def check_update_reviewer(repo, pr, token):
 
         print(f'Exception occurred with erro {e}')
 
-    
 
-# call
+# call the function with environment variables from yaml as parameters
 check_update_reviewer(os.getenv('GITHUB_REPOSITORY'), os.getenv('PULL_NUMBER'), os.getenv('GITHUB_TOKEN'))
