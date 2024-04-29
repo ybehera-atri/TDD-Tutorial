@@ -28,12 +28,11 @@ def check_update_reviewer(repo, pr, token):
         # list with reviewers not requested
         list_new = [i for i in reviewer_list if i not in reviewers_requested]
 
-        if len(reviewer_list) == 0:
-            print(f'No reviewers requested, adding reviewers')
+        if len(list_new) > 0:
+            print(f'Reviewers  {list_new} missing, adding reviewers')
+
         elif all(x in reviewers_requested for x in reviewer_list):
             print(f'All reviewers {reviewer_list} already requested, exiting')
-        elif len(list_new) > 0:
-            print(f'Adding the reviewers {list_new}')
 
     except Exception as e:
 
