@@ -22,7 +22,7 @@ def check_update_reviewer(repo, pr, token):
 
         reviewers_check = requests.get(base_url + reviewer_api, headers=headers).json()
         reviewers_requested = reviewers_check['users']
-        print(reviewers_requested)
+        print(f'Reviewers requested {reviewers_requested}')
 
     except Exception as e:
 
@@ -40,7 +40,7 @@ def check_update_reviewer(repo, pr, token):
 
         reviewer_request = requests.post(base_url + reviewer_api, headers=headers, data=json.dumps(reviewers))
 
-        print(f'{reviewer_request.content} and Status Code is {reviewer_request.status_code}')
+        #print(f'{reviewer_request.content} and Status Code is {reviewer_request.status_code}')
 
     except Exception as e:
 

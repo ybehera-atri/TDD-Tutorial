@@ -38,10 +38,3 @@ jobs:
         GITHUB_REPOSITORY: ${{ github.repository }}
         PULL_NUMBER: ${{ github.event.number }}
       run: cd tddproject/automation; python3 reviewer.py
-      
-    - name: Pull Request description
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_REPOSITORY: ${{ github.repository }}
-        PULL_NUMBER: ${{ github.event.number }}
-      run: cd tddproject/automation; python3 pr_description.py   
