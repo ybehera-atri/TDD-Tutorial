@@ -12,7 +12,8 @@ def fetch_update_pr(repo, pr, token):
     base_url = f"https://api.github.com/repos/"
     commits_pr_api = f"{repository}/pulls/{pull_num}/commits"
 
-    headers = {f"Authorization": f"token {token}", f"Accept": f"application/vnd.github+json"}
+    headers = {f"Authorization": f"token {token}",
+               f"Accept": f"application/vnd.github+json"}
 
     response = requests.get(base_url + commits_pr_api, headers=headers).json()
 
@@ -20,4 +21,5 @@ def fetch_update_pr(repo, pr, token):
 
 
 # call the function with environment variables from yaml as parameters
-fetch_update_pr(os.getenv('GITHUB_REPOSITORY'), os.getenv('PULL_NUMBER'), os.getenv('GITHUB_TOKEN'))
+fetch_update_pr(os.getenv('GITHUB_REPOSITORY'), os.getenv(
+    'PULL_NUMBER'), os.getenv('GITHUB_TOKEN'))
