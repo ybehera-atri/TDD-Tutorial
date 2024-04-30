@@ -1,4 +1,4 @@
-name: Python Script Workflow
+name: Python Reviewer Automation
 
 on: 
   pull_request:
