@@ -2,7 +2,7 @@ name: Python Script Workflow
 
 on: 
   pull_request:
-    branches: [ "feature_tdd_initial" ]
+    branches: [ "v*.*.*.*" ]
 
 jobs:
 
