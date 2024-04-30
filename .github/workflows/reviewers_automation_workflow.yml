@@ -1,8 +1,8 @@
-name: Python Script Workflow
+name: Python Reviewer Automation
 
 on: 
   pull_request:
-    branches: [ "feature_tdd_initial" ]
+    branches: [ "v*.*.*.*", main_django_3_2, main_django_3_2_deployment ]
 
 jobs:
 
