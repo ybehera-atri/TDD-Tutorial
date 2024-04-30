@@ -2,7 +2,7 @@ name: Python Script Workflow
 
 on: 
   pull_request:
-    branches: [ "v*.*.*.*" ]
+    branches: [ "v*.*.*.*", main_django_3_2, main_django_3_2_deployment ]
 
 jobs:
 
