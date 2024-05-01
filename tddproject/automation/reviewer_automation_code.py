@@ -17,8 +17,7 @@ def check_update_reviewer(repo, pr, token):
 
     # mandatory reviewers
     reviewer_list = ["bruschiusc"]
-    branch = os.getenv('BRANCH_NAME')
-    print(f'Base Branch off this PR is {branch}')
+    branch = os.getenv('BRANCH_NAME')  # base branch name of this PR
 
     # check the current reviewers requested
     try:
@@ -31,14 +30,24 @@ def check_update_reviewer(repo, pr, token):
         list_new = [i for i in reviewer_list if i not in reviewers_requested]
 
         if len(list_new) >= 0:
-            print(f'Reviewers  {list_new} missing, adding reviewers')
+            print(f'Managers {list_new} missing, adding reviewers')
 
         elif all(x in reviewers_requested for x in reviewer_list):
-            print(f'All reviewers {reviewer_list} already requested, exiting')
+            print(f'All managers {reviewer_list} already requested, exiting')
 
     except Exception as e:
 
         print(f'Exception occurred with error {e}')
+
+    # Adding committers as reviewers if base branch is version
+    if branch != 'main_django_3_2' or 'main_django_3_2_deployment':
+        try:
+            print(f'Base branch is version')
+
+        except Exception as e:
+            print(f'Exception occurred with error {e}')
+    else:
+        print(f'Base branch is not version, no additional reviewers')
 
         # if mandatory reviewer not present request
     try:
