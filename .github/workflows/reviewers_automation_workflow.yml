@@ -39,4 +39,4 @@ jobs:
         PULL_NUMBER: ${{ github.event.number }}
         BRANCH_NAME: ${{ github.ref_name}}
 
-      run: cd tddproject/automation; python3 reviewer.py
+      run: cd tddproject/automation; python3 reviewer_automation_code.py
