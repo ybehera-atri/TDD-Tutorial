@@ -47,7 +47,7 @@ def check_update_reviewer(repo, pr, token):
         if branch != 'main_django_3_2' or 'main_django_3_2_deployment':
             committers_info = requests.get(
                 base_url + committer_api, headers=headers)
-            print(committers_info['committer'])
+            print(committers_info.json()['committer'])
 
             if committers_info.status_code == 200:
                 print(type(committers_info))
