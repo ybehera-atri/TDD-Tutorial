@@ -20,6 +20,7 @@ def check_update_reviewer(repo, pr, token):
     branch = os.getenv('BRANCH_NAME')  # base branch name of this PR
     owner = os.getenv('REPO_OWNER')  # repo owner
     committer_api = f'{owner}/{repository}/pulls/{pull_num}/commits'
+    print(owner)
 
     # check the current reviewers requested
     try:
