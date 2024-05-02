@@ -11,7 +11,7 @@ def check_update_reviewer(repo, pr, token):
     pull_num = pr
     base_url = f'https://api.github.com/repos/'
     reviewer_api = f'{repository}/pulls/{pull_num}/requested_reviewers'
-
+    committer_api = f'{owner}/{repository}/pulls/{pull_num}/commits?per_page=250'
     headers = {f"Authorization": f"token {token}",
                f"Accept": f"application/vnd.github+json"}
 
@@ -43,8 +43,10 @@ def check_update_reviewer(repo, pr, token):
     # Adding committers as reviewers if base branch is version
     try:
         if branch != 'main_django_3_2' or 'main_django_3_2_deployment':
+            committers_info = requests.get(
+            base_url + committer_api, headers=headers).json()
 
-            print(f'Base branch is version')
+            print(f'Base branch is version, committer details {committers_info}')
 
         else:
             print(f'Base branch is not version, no additional reviewers')

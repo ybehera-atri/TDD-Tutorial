@@ -37,6 +37,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         PULL_NUMBER: ${{ github.event.number }}
-        BRANCH_NAME: ${{ github.base_ref}}
+        BRANCH_NAME: ${{ github.base_ref }}
+        REPO_OWNER: ${{ github.repository_owner }}
 
-      run: cd tddproject/automation; python3 reviewer_automation_code.py
+      run: cd tddproject/automation; python3 test_reviewer.py
