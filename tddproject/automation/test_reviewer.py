@@ -47,10 +47,9 @@ def check_update_reviewer(repo, pr, token):
                 base_url + committer_api, headers=headers)
             commit_json = committers_info.json()
             print(commit_json)
-            json_py = json.loads(commit_json)
 
             if committers_info.status_code == 200:
-                print(type(json_py))
+                print(type(commit_json))
             else:
                 print(f'{committers_info.status_code} and {committers_info.content}')
 
