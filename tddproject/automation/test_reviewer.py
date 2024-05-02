@@ -20,7 +20,6 @@ def check_update_reviewer(repo, pr, token):
     branch = os.getenv('BRANCH_NAME')  # base branch name of this PR
     owner = os.getenv('REPO_OWNER')  # repo owner
     committer_api = f'{owner}/{repository}/pulls/{pull_num}/commits'
-    print(owner)
 
     # check the current reviewers requested
     try:
@@ -47,6 +46,7 @@ def check_update_reviewer(repo, pr, token):
         if branch != 'main_django_3_2' or 'main_django_3_2_deployment':
             committers_info = requests.get(
                 base_url + committer_api, headers=headers)
+            print(base_url+committer_api)
 
             if committers_info.status_code == 200:
                 print(
