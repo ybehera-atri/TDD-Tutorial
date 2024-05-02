@@ -48,7 +48,7 @@ def check_update_reviewer(repo, pr, token):
             committers_info = requests.get(
                 base_url + committer_api, headers=headers)
             text_json = committers_info.text
-            json_data = json.loads(text_json)
+            json_data = json.dumps(text_json)
 
             print(json_data)
 
