@@ -49,7 +49,7 @@ def check_update_reviewer(repo, pr, token):
             json_py = json.loads(commit_json)
 
             if committers_info.status_code == 200:
-                print(json_py)
+                print(json_py['committer'])
             else:
                 print(f'{committers_info.status_code} and {committers_info.content}')
 
