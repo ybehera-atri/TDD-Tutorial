@@ -15,6 +15,8 @@ def check_update_reviewer(repo, pr, token):
     headers = {f"Authorization": f"token {token}",
                f"Accept": f"application/vnd.github+json"}
 
+    json_dict = {}
+
     # mandatory reviewers
     reviewer_list = ["bruschiusc"]
     branch = os.getenv('BRANCH_NAME')  # base branch name of this PR
@@ -45,15 +47,14 @@ def check_update_reviewer(repo, pr, token):
         if branch != 'main_django_3_2' or 'main_django_3_2_deployment':
             committers_info = requests.get(
                 base_url + committer_api, headers=headers)
-            json_data = committers_info.json()
-            
-            print(json_data)
+            json_dict = committers_info.json()
+
+            print(json_dict)
 
             if committers_info.status_code == 200:
-                print(type(json_data))
+                print(type(json_dict))
             else:
-                print(f'The error {committers_info.status_code}')    
-            
+                print(f'The error {committers_info.status_code}')
 
         else:
             print(f'Base branch is not version, no additional reviewers')
