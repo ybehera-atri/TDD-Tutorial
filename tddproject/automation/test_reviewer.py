@@ -49,7 +49,7 @@ def check_update_reviewer(repo, pr, token):
 
             if committers_info.status_code == 200:
                 print(
-                    f'Base branch is version, committer details {committers_info.json()}')
+                    f'Base branch is version, committer details {committers_info.json()['commit']['author']['name']}')
             else:
                 print(f'{committers_info.status_code} and {committers_info.content}')
 
