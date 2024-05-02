@@ -47,8 +47,11 @@ def check_update_reviewer(repo, pr, token):
             committers_info = requests.get(
                 base_url + committer_api, headers=headers)
 
-            print(
-                f'Base branch is version, committer details {committers_info}')
+            if committers_info.status_code == 200:
+                print(
+                    f'Base branch is version, committer details {json(committers_info)}')
+            else:
+                print(f'{committers_info.status_code} and {committers_info.text}')
 
         else:
             print(f'Base branch is not version, no additional reviewers')
