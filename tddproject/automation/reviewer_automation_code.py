@@ -18,7 +18,6 @@ def check_update_reviewer(repo, pr, token):
     # mandatory reviewers
     reviewer_list = ["bruschiusc"]
     branch = os.getenv('BRANCH_NAME')  # base branch name of this PR
-    owner = os.getenv('REPO_OWNER') # repo owner
 
     # check the current reviewers requested
     try:
