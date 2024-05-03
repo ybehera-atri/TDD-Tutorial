@@ -51,8 +51,9 @@ def check_update_reviewer(repo, pr, token):
             committer_json = committers_info.json()
             for values in committer_json:
                 # print(f'{values} {type(values)}')
-                for val in values['sha']:
-                    print(f'{type(val)} {val}')
+                val_json = json.dumps(values)
+                for val_json in values['sha']:
+                    print(f'{type(val_json)} {val_json}')
 
             if committers_info.status_code == 200:
                 print(type(committers_info))
