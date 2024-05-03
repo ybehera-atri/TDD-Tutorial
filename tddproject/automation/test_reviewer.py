@@ -40,7 +40,8 @@ def check_update_reviewer(repo, pr, token):
 
     except Exception as e:
 
-        print(f'Exception occurred with error {e}')
+        print(
+            f'Exception occurred while getting the reviewers requested with error {e}')
 
     # Adding committers as reviewers if base branch is version
     try:
@@ -48,7 +49,9 @@ def check_update_reviewer(repo, pr, token):
             committers_info = requests.get(
                 base_url + committer_api, headers=headers).json()
             for values in committers_info:
-                print(f'{values} {type(values)}')
+                # print(f'{values} {type(values)}')
+                for committers in values['committer']:
+                    print(committers)
 
             if committers_info.status_code == 200:
                 print(type(committers_info))
@@ -58,7 +61,7 @@ def check_update_reviewer(repo, pr, token):
         else:
             print(f'Base branch is not version, no additional reviewers')
     except Exception as e:
-        print(f'Exception occurred with error {e}')
+        print(f'Exception occurred while fetching committers with error {e}')
 
         # if mandatory reviewer not present request
     try:
@@ -77,7 +80,7 @@ def check_update_reviewer(repo, pr, token):
 
     except Exception as e:
 
-        print(f'Exception occurred with erro {e}')
+        print(f'Exception occurred while adding reviewers with error {e}')
 
 
 # call the function with environment variables from yaml as parameters
