@@ -2,7 +2,7 @@ name: Python Reviewer Automation
 
 on: 
   pull_request:
-    branches: [ "v*.*.*.*", main_django_3_2, main_django_3_2_deployment ]
+    branches: [ "v_*.*.*", main_django_3_2, main_django_3_2_deployment ]
 
 jobs:
 
@@ -39,4 +39,4 @@ jobs:
         PULL_NUMBER: ${{ github.event.number }}
         BRANCH_NAME: ${{ github.base_ref }}
 
-      run: cd tddproject/automation; python3 reviewer_automation_code.py
+      run: cd tddproject/automation; python3 test_reviewer.py
