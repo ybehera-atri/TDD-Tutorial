@@ -18,7 +18,7 @@ def check_update_reviewer(repo, pr, token):
     json_dict = {}
 
     # mandatory reviewers
-    reviewer_list = ["bruschiusc"]
+    reviewer_list = ["bruschi@atrihub.io"]
     branch = os.getenv('BRANCH_NAME')  # base branch name of this PR
     committer_api = f'{repository}/pulls/{pull_num}/commits?per_page=250'
 
