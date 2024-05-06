@@ -11,6 +11,7 @@ def check_update_reviewer(repo, pr, token):
     pull_num = pr
     base_url = f'https://api.github.com/repos/'
     reviewer_api = f'{repository}/pulls/{pull_num}/requested_reviewers'
+    search_user = f'https://api.github.com/search/users?q='
 
     headers = {f"Authorization": f"token {token}",
                f"Accept": f"application/vnd.github+json"}
@@ -18,7 +19,7 @@ def check_update_reviewer(repo, pr, token):
     json_dict = {}
 
     # mandatory reviewers
-    reviewer_list = ["bruschi@atrihub.io"]
+    reviewer_list = ["bruschiusc"]
     branch = os.getenv('BRANCH_NAME')  # base branch name of this PR
     committer_api = f'{repository}/pulls/{pull_num}/commits?per_page=250'
 
@@ -50,9 +51,11 @@ def check_update_reviewer(repo, pr, token):
                 base_url + committer_api, headers=headers)
             committer_text = committers_info.text
             data_json = json.loads(committer_text)
-            #print(f'{type(data_json)} {data_json}')
+            # print(f'{type(data_json)} {data_json}')
             for names in data_json:
-                print(names.get('commit').get('author').get('email'))
+                committer_email = names.get(
+                    'commit').get('author').get('email')
+                print(search_user+f'{committer_email}')
 
             if committers_info.status_code == 200:
                 print(type(data_json))
