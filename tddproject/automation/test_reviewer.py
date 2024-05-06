@@ -55,7 +55,8 @@ def check_update_reviewer(repo, pr, token):
             for names in data_json:
                 committer_email = names.get(
                     'committer')
-                print(search_user+f'{committer_email}')
+                #print(search_user+f'{committer_email}')
+                print(f'{committer_email}')
 
             if committers_info.status_code == 200:
                 print(type(data_json))
