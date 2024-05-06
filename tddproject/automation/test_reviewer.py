@@ -45,14 +45,14 @@ def check_update_reviewer(repo, pr, token):
 
     # Adding committers as reviewers if base branch is version
     try:
-        if branch != 'main_django_3_2' or 'main_django_3_2_deployment':
+        if branch != 'main_django_3_2' or 'main_django_3_2_deployment' or 'feature' not in branch:
             committers_info = requests.get(
                 base_url + committer_api, headers=headers)
             committer_text = committers_info.text
             data_json = json.loads(committer_text)
             #print(f'{type(data_json)} {data_json}')
             for names in data_json:
-                print(names.get('commit').get('author').get('name'))
+                print(names.get('commit').get('author').get('email'))
 
             if committers_info.status_code == 200:
                 print(type(data_json))
