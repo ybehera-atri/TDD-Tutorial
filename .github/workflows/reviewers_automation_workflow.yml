@@ -2,7 +2,7 @@ name: Python Reviewer Automation
 
 on: 
   pull_request:
-    branches: [ main_django_3_2_deployment, main_django_3_2, main_yb_deployment, main_yb, "v_*.*.*", "v_*.*.*.*" ]
+    branches: [ main_django_3_2_deployment, main_django_3_2, "v_*.*.*", "v_*.*.*.*" ]
 
 jobs:
 
