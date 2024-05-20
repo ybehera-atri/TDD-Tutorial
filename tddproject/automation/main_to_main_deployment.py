@@ -27,7 +27,7 @@ def pr_create(repo, token, branch, owner, head):
     # check and create pr if base branch is main, switch main_yb with main_3_2
     try:
 
-        if branch == 'main_yb' or branch == 'main_3_2':
+        if branch == 'main_yb' or branch == 'main_django_3_2':
             print(base_url+create_pr_api)
             create_pr = requests.post(
                 base_url+create_pr_api, headers=headers, json=payload)
