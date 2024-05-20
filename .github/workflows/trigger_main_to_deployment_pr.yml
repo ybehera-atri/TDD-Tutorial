@@ -4,7 +4,7 @@ on:
   pull_request:
     types:
       - closed
-    branches: [ main_django_3_2, main_yb ]
+    branches: [ main_django_3_2 ]
 
 jobs:
 

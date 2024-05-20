@@ -81,7 +81,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
         # Adding committers as reviewers only if base branch is version and extracting messages
         # Remove additional branch names in prod below
         try:
-            if branch != 'main_django_3_2' and branch != 'main_django_3_2_deployment' and branch != 'main_yb' and branch != 'main_yb_deployment':
+            if branch != 'main_django_3_2' and branch != 'main_django_3_2_deployment':
                 print(f'Base branch is version fetching committers')
                 for names in data_json:
                     committer_email = names.get(
