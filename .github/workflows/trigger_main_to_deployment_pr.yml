@@ -38,4 +38,4 @@ jobs:
         OWNER: ${{ github.repository_owner }}
         HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
 
-      run: cd automation; python3 main_to_main_deployment.py
+      run: cd tddproject/automation; python3 main_to_main_deployment.py
