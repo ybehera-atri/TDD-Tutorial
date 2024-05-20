@@ -16,8 +16,8 @@ def pr_create(repo, token, branch, owner, head):
                f"Accept": f"application/vnd.github+json"}
 
     payload = {"title": head,
-               "head": 'main_3_2',  # main_3_2
-               "base": 'main_3_2_deployment',  # main_3_2_deployment
+               "head": 'main_django_3_2',  # main_django_3_2
+               "base": 'main_django_3_2_deployment',  # main_django_3_2_deployment
                }  # switch branch names in prod
     create_pr_api = f'repos/{repo}/pulls'
 
