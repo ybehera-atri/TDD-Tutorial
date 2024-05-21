@@ -83,6 +83,18 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
         # Remove additional branch names in prod below
         try:
             if branch != 'main_django_3_2_deployment':
+
+                if branch == 'main_django_3_2':
+                    print(f'Updating title of main')
+                    payload = {"title": head}
+                    update_pr = requests.patch(
+                        base_url+update_pr_api, headers=headers, json=payload)
+
+                    if update_pr.status_code == 200:
+                        print(f'Title updated with version')
+                    else:
+                        print(f'Error updating PR title {update_pr.content}')
+                        
                 print(f'Base branch is {branch}, fetching committers')
                 for names in data_json:
                     committer_email = names.get(
@@ -96,16 +108,6 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                         list_new.append(committer_data)
 
                 print(f'reviewer list with committers: {list_new}')
-
-                if branch == 'main_django_3_2':
-                    payload = {"title": head}
-                    update_pr = requests.patch(
-                        base_url+update_pr_api, headers=headers, json=payload)
-
-                    if update_pr.status_code == 200:
-                        print(f'Title updated with version')
-                    else:
-                        print(f'Error updating PR title {update_pr.content}')
 
             else:
                 print(f'Base branch is main deployment, no additional reviewers')
