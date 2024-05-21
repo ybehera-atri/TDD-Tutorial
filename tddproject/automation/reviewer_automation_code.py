@@ -45,7 +45,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
             committer_msg = names.get('commit').get("message")
 
             git_task = re.findall(pattern, committer_msg)
-            all_matches.update(f'{[git_task]}')
+            all_matches.update('['+git_task+']')
         formatted_str = '\n'.join(sorted(all_matches))
         print(f'These are the task ids from this PR: {formatted_str}')
 
@@ -82,7 +82,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
         # Remove additional branch names in prod below
         try:
             if branch != 'main_django_3_2_deployment':
-                print(f'Base branch is version fetching committers')
+                print(f'Base branch is {branch}, fetching committers')
                 for names in data_json:
                     committer_email = names.get(
                         'commit').get('author').get('email')
@@ -97,7 +97,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                 print(f'reviewer list with committers: {list_new}')
 
             else:
-                print(f'Base branch is not version, no additional reviewers')
+                print(f'Base branch is main deployment, no additional reviewers')
                 # updates title with version number for version to main pr
                 if branch != 'main_django_3_2_deployment':
                     payload = {"title": head}
