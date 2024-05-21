@@ -45,7 +45,8 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
             committer_msg = names.get('commit').get("message")
 
             git_task = re.findall(pattern, committer_msg)
-            all_matches.update(git_task)
+            with_sq = [f'[{t}]' for t in git_task]
+            all_matches.update(with_sq)
         formatted_str = '\n'.join(sorted(all_matches))
         print(f'These are the task ids from this PR: {formatted_str}')
 
@@ -60,7 +61,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                 f'Could not update pull request with git task, error code: {update_pr_body.content}')
     except Exception as e:
         print(f'Exception occurred with error {e}')
-
+#
     # check the current reviewers requested
     try:
 
@@ -81,8 +82,8 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
         # Adding committers as reviewers only if base branch is version and extracting messages
         # Remove additional branch names in prod below
         try:
-            if branch != 'main_django_3_2' and branch != 'main_django_3_2_deployment':
-                print(f'Base branch is version fetching committers')
+            if branch != 'main_django_3_2_deployment':
+                print(f'Base branch is {branch}, fetching committers')
                 for names in data_json:
                     committer_email = names.get(
                         'commit').get('author').get('email')
@@ -97,9 +98,9 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                 print(f'reviewer list with committers: {list_new}')
 
             else:
-                print(f'Base branch is not version, no additional reviewers')
+                print(f'Base branch is main deployment, no additional reviewers')
                 # updates title with version number for version to main pr
-                if branch != 'main_django_3_2_deployment' and branch != 'main_yb_deployment':
+                if branch != 'main_django_3_2_deployment':
                     payload = {"title": head}
                     update_pr = requests.patch(
                         base_url+update_pr_api, headers=headers, json=payload)
