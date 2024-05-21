@@ -61,7 +61,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                 f'Could not update pull request with git task, error code: {update_pr_body.content}')
     except Exception as e:
         print(f'Exception occurred with error {e}')
-
+#
     # check the current reviewers requested
     try:
 
