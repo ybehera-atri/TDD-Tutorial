@@ -97,10 +97,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
 
                 print(f'reviewer list with committers: {list_new}')
 
-            else:
-                print(f'Base branch is main deployment, no additional reviewers')
-                # updates title with version number for version to main pr
-                if branch != 'main_django_3_2_deployment':
+                if branch == 'main_django_3_2':
                     payload = {"title": head}
                     update_pr = requests.patch(
                         base_url+update_pr_api, headers=headers, json=payload)
@@ -110,6 +107,20 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                     else:
                         print(f'Error updating PR title {update_pr.content}')
 
+            else:
+                print(f'Base branch is main deployment, no additional reviewers')
+                # updates title with version number for version to main pr
+                '''
+                if branch != 'main_django_3_2_deployment' and branch == 'main_django_3_2':
+                    payload = {"title": head}
+                    update_pr = requests.patch(
+                        base_url+update_pr_api, headers=headers, json=payload)
+
+                    if update_pr.status_code == 200:
+                        print(f'Title updated with version')
+                    else:
+                        print(f'Error updating PR title {update_pr.content}')
+                '''
         except Exception as e:
             print(
                 f'Reviewer list with committers: {list_new}')
