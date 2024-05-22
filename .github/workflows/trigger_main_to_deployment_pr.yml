@@ -1,12 +1,15 @@
-name: Python Reviewer Automation
+name: Trigger PR From main_3_2 To main_3_2_deployment On Version To Main Merge
 
 on: 
   pull_request:
-    branches: [ main_django_3_2_deployment, main_django_3_2, "v_*.*.*", "v_*.*.*.*" ]
+    types:
+      - closed
+    branches: [ main_django_3_2 ]
 
 jobs:
 
-  build:
+  if_merged:
+    if: github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
 
@@ -25,13 +28,14 @@ jobs:
         pip install requests
         if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
 
-    - name: Reviewer check
+    - name: Trigger PR from main_3_2 to main_3_2_deployment
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_PAT: ${{ secrets.AUTOMATION_PAT }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         PULL_NUMBER: ${{ github.event.number }}
         BRANCH_NAME: ${{ github.base_ref }}
         PR_USER: ${{ github.actor }}
+        OWNER: ${{ github.repository_owner }}
         HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
 
-      run: cd tddproject/automation; python3 reviewer_automation_code.py 
+      run: cd tddproject/automation; python3 main_to_main_deployment.py
