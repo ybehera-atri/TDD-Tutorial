@@ -61,7 +61,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                 f'Could not update pull request with git task, error code: {update_pr_body.content}')
     except Exception as e:
         print(f'Exception occurred with error {e}')
-#
+
     # check the current reviewers requested
     try:
 
@@ -94,7 +94,6 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                         print(f'Title updated with version')
                     else:
                         print(f'Error updating PR title {update_pr.content}')
-
                 print(f'Base branch is {branch}, fetching committers')
                 for names in data_json:
                     committer_email = names.get(
@@ -111,6 +110,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
 
             else:
                 print(f'Base branch is main deployment, no additional reviewers')
+
         except Exception as e:
             print(
                 f'Reviewer list with committers: {list_new}')
