@@ -80,7 +80,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                 f'All managers {reviewer_list} already requested')
 
         # Adding committers as reviewers only if base branch is version and extracting messages
-        # Remove additional branch names in prod below
+        
         try:
             if branch != 'main_django_3_2_deployment':
                 # updates title with version number for version to main pr
