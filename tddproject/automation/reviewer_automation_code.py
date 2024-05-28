@@ -21,7 +21,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     reviewer_api = f'repos/{repository}/pulls/{pull_num}/requested_reviewers'
     committer_api = f'repos/{repository}/pulls/{pull_num}/commits?per_page=250'
     update_pr_api = f'repos/{repository}/pulls/{pull_num}'
-    create_release_api = f'/repos/{repository}/releases'
+    create_release_api = f'repos/{repository}/releases'
     user_search = f'search/users?q='
 
     headers = {f"Authorization": f"token {token}",
@@ -81,7 +81,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                 f'All managers {reviewer_list} already requested')
 
         # Adding committers as reviewers only if base branch is version and extracting messages
-        
+
         try:
             if branch != 'main_django_3_2_deployment':
                 # updates title with version number for version to main pr
@@ -95,17 +95,27 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                         if update_pr.status_code == 200:
                             print(f'Title updated with version')
                         else:
-                            print(f'Error updating PR title {update_pr.content}')
+                            print(
+                                f'Error updating PR title {update_pr.content}')
 
                     except Exception as e:
-                        print(f'Exception occurred while updating title {e}')   
+                        print(f'Exception occurred while updating title {e}')
 
                     try:
-                        print(f'This part creates release notes')
+                        print(f'Base branch is Main, lets creates release notes')
+                        payload_release = {"tag_name": "Test"}
+                        release_call = requests.post(
+                            base_url+create_release_api, headers=headers, json=payload_release)
+                        
+                        if release_call.status_code == 201:
+                            print(f'Release notes created')
+                        else:
+                            print(
+                                f'Error creating Release notes {release_call.content}')
 
                     except Exception as e:
-                        print(f'Exception occurred while creating release {e}')   
-                        
+                        print(f'Exception occurred while creating release {e}')
+
                 print(f'Base branch is {branch}, fetching committers')
                 for names in data_json:
                     committer_email = names.get(
