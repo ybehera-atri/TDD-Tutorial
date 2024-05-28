@@ -21,6 +21,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     reviewer_api = f'repos/{repository}/pulls/{pull_num}/requested_reviewers'
     committer_api = f'repos/{repository}/pulls/{pull_num}/commits?per_page=250'
     update_pr_api = f'repos/{repository}/pulls/{pull_num}'
+    create_release_api = f'/repos/{repository}/releases'
     user_search = f'search/users?q='
 
     headers = {f"Authorization": f"token {token}",
@@ -85,15 +86,26 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
             if branch != 'main_django_3_2_deployment':
                 # updates title with version number for version to main pr
                 if branch == 'main_django_3_2':
-                    print(f'Updating title of main')
-                    payload = {"title": head}
-                    update_pr = requests.patch(
-                        base_url+update_pr_api, headers=headers, json=payload)
+                    try:
+                        print(f'Updating title of main')
+                        payload = {"title": head}
+                        update_pr = requests.patch(
+                            base_url+update_pr_api, headers=headers, json=payload)
 
-                    if update_pr.status_code == 200:
-                        print(f'Title updated with version')
-                    else:
-                        print(f'Error updating PR title {update_pr.content}')
+                        if update_pr.status_code == 200:
+                            print(f'Title updated with version')
+                        else:
+                            print(f'Error updating PR title {update_pr.content}')
+
+                    except Exception as e:
+                        print(f'Exception occurred while updating title {e}')   
+
+                    try:
+                        print(f'This part creates release notes')
+
+                    except Exception as e:
+                        print(f'Exception occurred while creating release {e}')   
+                        
                 print(f'Base branch is {branch}, fetching committers')
                 for names in data_json:
                     committer_email = names.get(
