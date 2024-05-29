@@ -54,7 +54,7 @@ def pr_create(repo, token, branch, owner, head, pr):
             set_upd = "\n".join(messageset)
             payload_release = {f"tag_name": f"{head}",
                                f"name": f"Version {head}",
-                               f"body": f"Summary \n"}
+                               f"body": f"Summary \n Commit messages go here"}
             release_call = requests.post(
                 base_url+create_release_api, headers=headers, json=payload_release)
 
