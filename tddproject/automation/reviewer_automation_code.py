@@ -19,7 +19,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     branch = branch_name  # base branch name of this PR
     base_url = f'https://api.github.com/'
     reviewer_api = f'repos/{repository}/pulls/{pull_num}/requested_reviewers'
-    committer_api = f'repos/{repository}/pulls/{pull_num}/commits?per_page=250'
+    committer_api = f'repos/{repository}/pulls/{pull_num}/commits?per_page=100'
     update_pr_api = f'repos/{repository}/pulls/{pull_num}'
     create_release_api = f'repos/{repository}/releases'
     user_search = f'search/users?q='
@@ -40,12 +40,14 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     data_json = json.loads(committer_text)
 
     # grab and update git task id to pr body
+    # grab commit messages
     try:
 
         for names in data_json:
             committer_msg = names.get('commit').get("message")
-
+            message = re.sub(pattern, '', committer_msg)
             git_task = re.findall(pattern, committer_msg)
+            print(f"{message.split(']')[0]}:{git_task}")
             with_sq = [f'[{t}]' for t in git_task]
             all_matches.update(with_sq)
         formatted_str = '\n'.join(sorted(all_matches))
@@ -88,7 +90,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                 if branch == 'main_django_3_2':
                     try:
                         print(f'Updating title of main')
-                        payload = {"title": head}
+                        payload = {f"title": head, f"name": f"Version {head}"}
                         update_pr = requests.patch(
                             base_url+update_pr_api, headers=headers, json=payload)
 
@@ -103,10 +105,10 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
 
                     try:
                         print(f'Base branch is Main, lets creates release notes')
-                        payload_release = {"tag_name": "Test"}
+                        payload_release = {f"tag_name": f"{head}"}
                         release_call = requests.post(
                             base_url+create_release_api, headers=headers, json=payload_release)
-                        
+
                         if release_call.status_code == 201:
                             print(f'Release notes created')
                         else:
