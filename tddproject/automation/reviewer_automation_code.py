@@ -46,7 +46,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
         for names in data_json:
             committer_msg = names.get('commit').get("message")
             message = re.sub(pattern, '', committer_msg)
-            print(message)
+            print(message.strip())
             git_task = re.findall(pattern, committer_msg)
             with_sq = [f'[{t}]' for t in git_task]
             all_matches.update(with_sq)
