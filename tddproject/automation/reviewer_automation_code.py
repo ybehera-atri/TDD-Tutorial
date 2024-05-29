@@ -67,11 +67,12 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     # grab the commit comments
     try:
         comments = requests.get(base_url + commit_comments_api, headers=headers).json()   
-        if comments.status_code == 200:
-            print(f'Below are the comments')
-            print(f'{comments}')
-        else:
-            print(f'Error with the API call, {comments.status_code}')     
+        print(comments)
+        #if comments.status_code == 200:
+        #    print(f'Below are the comments')
+        #    print(f'{comments}')
+        #else:
+        #    print(f'Error with the API call, {comments.status_code}')     
 
     except Exception as e:
         print(f'Exception occurred while fetching comments {e}')    
