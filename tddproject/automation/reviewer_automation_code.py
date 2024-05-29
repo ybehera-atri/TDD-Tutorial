@@ -22,7 +22,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     committer_api = f'repos/{repository}/pulls/{pull_num}/commits?per_page=250'
     update_pr_api = f'repos/{repository}/pulls/{pull_num}'
     create_release_api = f'repos/{repository}/releases'
-    commit_comments_api = f'repos/{repository}/comments'
+    commit_comments_api = f'repos/{repository}/comments?per_page=25'
     user_search = f'search/users?q='
 
     headers = {f"Authorization": f"token {token}",
@@ -66,13 +66,12 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
         
     # grab the commit comments
     try:
-        comments = requests.get(base_url + commit_comments_api, headers=headers).json()   
-        print(comments)
-        #if comments.status_code == 200:
-        #    print(f'Below are the comments')
-        #    print(f'{comments}')
-        #else:
-        #    print(f'Error with the API call, {comments.status_code}')     
+        comments = requests.get(base_url + commit_comments_api, headers=headers)  
+        if comments.status_code == 200:
+            print(f'Below are the comments')
+            print(f'{comments.json}')
+        else:
+            print(f'Error with the API call, {comments.status_code}')     
 
     except Exception as e:
         print(f'Exception occurred while fetching comments {e}')    
