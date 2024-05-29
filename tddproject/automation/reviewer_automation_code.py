@@ -6,7 +6,7 @@
 # Adds version name to PR from version to main
 # Associated with reviewers_automation_workflow.yml
 
-import requests
+import requests # type: ignore
 import os
 import json
 import re
@@ -27,7 +27,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                f"Accept": f"application/vnd.github+json"}
 
     # mandatory reviewers
-    reviewer_list = ["bruschiusc", "hongmeiqiu-usc", "jiso"]
+    reviewer_list = ["bruschiusc"]
 
     list_new = []
     all_matches = set()

@@ -3,14 +3,14 @@
 # Adds version name to PR
 # Associated with trigger_main_to_deployment_pr.yml
 
-import requests
+import requests # type: ignore
 import json
 import os
 
 base_url = f'https://api.github.com/'
 
 
-def pr_create(repo, token, branch, owner, head):
+def pr_create(repo, token, branch, owner, head, pr):
 
     headers = {f"Authorization": f"token {token}",
                f"Accept": f"application/vnd.github+json"}
@@ -23,6 +23,25 @@ def pr_create(repo, token, branch, owner, head):
 
     payload_label = {'labels': ['Deployment']}
     create_label_api = f'repos/{repo}/issues/'
+    create_release_api = f'repos/{repo}/releases'
+    committer_api = f'repos/{repo}/pulls/{pr}/commits?per_page=100'
+
+    # Create release on version main merge
+    try:
+        if branch == 'main_django_3_2':
+            print(f'{head} and main_django_3_2 merged, creating Release')
+            payload_release = {f"tag_name": f"{head}", f"name": f"Version {head}"}
+            release_call = requests.post(
+                base_url+create_release_api, headers=headers, json=payload_release)
+
+            if release_call.status_code == 201:
+                print(f'Release notes created')
+            else:
+                print(
+                    f'Error creating Release notes {release_call.content}')
+
+    except Exception as e:
+        print(f'Exception occurred during release creation {e}')
 
     # check and create pr if base branch is main, switch main_yb with main_3_2
     try:
@@ -56,4 +75,5 @@ def pr_create(repo, token, branch, owner, head):
 
 # call the function with environment variables from yaml as parameters
 pr_create(os.getenv('GITHUB_REPOSITORY'), os.getenv('GITHUB_PAT'),
-          os.getenv('BRANCH_NAME'), os.getenv('OWNER'), os.getenv('HEAD_BRANCH'))
+          os.getenv('BRANCH_NAME'), os.getenv('OWNER'), os.getenv('HEAD_BRANCH'), os.getenv(
+    'PULL_NUMBER'))
