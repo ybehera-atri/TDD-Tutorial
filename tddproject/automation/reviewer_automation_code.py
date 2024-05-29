@@ -22,7 +22,6 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     committer_api = f'repos/{repository}/pulls/{pull_num}/commits?per_page=100'
     update_pr_api = f'repos/{repository}/pulls/{pull_num}'
     create_release_api = f'repos/{repository}/releases'
-    commit_comments_api = f'repos/{repository}/comments?per_page=25'
     user_search = f'search/users?q='
 
     headers = {f"Authorization": f"token {token}",
@@ -41,11 +40,13 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     data_json = json.loads(committer_text)
 
     # grab and update git task id to pr body
+    # grab commit messages
     try:
 
         for names in data_json:
             committer_msg = names.get('commit').get("message")
-
+            message = re.sub(pattern, '', committer_msg)
+            print(message)
             git_task = re.findall(pattern, committer_msg)
             with_sq = [f'[{t}]' for t in git_task]
             all_matches.update(with_sq)
@@ -63,21 +64,6 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                 f'Could not update pull request with git task, error code: {update_pr_body.content}')
     except Exception as e:
         print(f'Exception occurred with error {e}')
-        
-    # grab the commit message
-    try:
-        response = requests.get(base_url + committer_api, headers=headers)
-        print(response.text)
-        
-#        if comments.status_code == 200:
-#            print(f'Below are the comments')
-#            for comment in comments:
-#                print(comment['body'])
-#        else:
-#            print(f'Error with the API call, {comments.status_code}')     
-
-    except Exception as e:
-        print(f'Exception occurred while fetching comments {e}')    
 
     # check the current reviewers requested
     try:
@@ -122,7 +108,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                         payload_release = {f"tag_name": f"{head}"}
                         release_call = requests.post(
                             base_url+create_release_api, headers=headers, json=payload_release)
-                        
+
                         if release_call.status_code == 201:
                             print(f'Release notes created')
                         else:
