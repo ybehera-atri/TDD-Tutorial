@@ -3,9 +3,10 @@
 # Adds version name to PR
 # Associated with trigger_main_to_deployment_pr.yml
 
-import requests # type: ignore
+import requests  # type: ignore
 import json
 import os
+import re
 
 base_url = f'https://api.github.com/'
 
@@ -26,11 +27,30 @@ def pr_create(repo, token, branch, owner, head, pr):
     create_release_api = f'repos/{repo}/releases'
     committer_api = f'repos/{repo}/pulls/{pr}/commits?per_page=100'
 
+    # grab commit messages
+    try:
+        # committers information, user and committ message
+        committers_info = requests.get(
+            base_url + committer_api, headers=headers)
+        committer_text = committers_info.text
+        data_json = json.loads(committer_text)
+        pattern = r'\b(?:\[)?([a-zA-Z]+-\d+)(?:\])?\b'
+
+        for names in data_json:
+            committer_msg = names.get('commit').get("message")
+            message = re.sub(pattern, '', committer_msg)
+            git_task = re.findall(pattern, committer_msg)
+            print(f"{message.split(']')[0]}:{git_task}")
+
+    except Exception as e:
+        print(f'Exception occurred with error {e}')
+
     # Create release on version main merge
     try:
         if branch == 'main_django_3_2':
             print(f'{head} and main_django_3_2 merged, creating Release')
-            payload_release = {f"tag_name": f"{head}", f"name": f"Version {head}"}
+            payload_release = {f"tag_name": f"{head}",
+                               f"name": f"Version {head}"}
             release_call = requests.post(
                 base_url+create_release_api, headers=headers, json=payload_release)
 
