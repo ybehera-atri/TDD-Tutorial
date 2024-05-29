@@ -6,7 +6,7 @@
 # Adds version name to PR from version to main
 # Associated with reviewers_automation_workflow.yml
 
-import requests
+import requests # type: ignore
 import os
 import json
 import re
