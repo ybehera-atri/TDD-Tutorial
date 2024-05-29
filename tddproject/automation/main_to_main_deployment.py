@@ -40,7 +40,7 @@ def pr_create(repo, token, branch, owner, head, pr):
             committer_msg = names.get('commit').get("message")
             message = re.sub(pattern, '', committer_msg)
             git_task = re.findall(pattern, committer_msg)
-            print(f"{message.split(']')[0]}:{git_task.strip('[] ').strip()}")
+            print(f"{message.split(']')[0]}:{git_task[0]}")
 
     except Exception as e:
         print(f'Exception occurred with error {e}')
