@@ -47,7 +47,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
             committer_msg = names.get('commit').get("message")
             message = re.sub(pattern, '', committer_msg)
             git_task = re.findall(pattern, committer_msg)
-            print(f"{message.split(']')[0]}:{git_task}")
+            #print(f"{message.split(']')[0]}:{git_task}")
             with_sq = [f'[{t}]' for t in git_task]
             all_matches.update(with_sq)
         formatted_str = '\n'.join(sorted(all_matches))
