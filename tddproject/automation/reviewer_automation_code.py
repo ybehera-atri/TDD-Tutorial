@@ -22,6 +22,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     committer_api = f'repos/{repository}/pulls/{pull_num}/commits?per_page=250'
     update_pr_api = f'repos/{repository}/pulls/{pull_num}'
     create_release_api = f'repos/{repository}/releases'
+    commit_comments_api = f'repos/{repository}/comments'
     user_search = f'search/users?q='
 
     headers = {f"Authorization": f"token {token}",
@@ -62,6 +63,18 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                 f'Could not update pull request with git task, error code: {update_pr_body.content}')
     except Exception as e:
         print(f'Exception occurred with error {e}')
+        
+    # grab the commit comments
+    try:
+        comments = requests.get(base_url + commit_comments_api, headers=headers)   
+        if comments.status_code == 200:
+            print(f'Below are the comments')
+            print(f'{comments}')
+        else:
+            print(f'Error with the API call, {comments.status_code}')     
+
+    except Exception as e:
+        print(f'Exception occurred while fetching comments {e}')    
 
     # check the current reviewers requested
     try:
@@ -88,7 +101,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                 if branch == 'main_django_3_2':
                     try:
                         print(f'Updating title of main')
-                        payload = {"title": head}
+                        payload = {f"title": head, f"name": f"Version {head}"}
                         update_pr = requests.patch(
                             base_url+update_pr_api, headers=headers, json=payload)
 
@@ -103,7 +116,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
 
                     try:
                         print(f'Base branch is Main, lets creates release notes')
-                        payload_release = {"tag_name": "Test"}
+                        payload_release = {f"tag_name": f"{head}"}
                         release_call = requests.post(
                             base_url+create_release_api, headers=headers, json=payload_release)
                         
