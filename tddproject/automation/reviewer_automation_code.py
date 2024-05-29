@@ -105,7 +105,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
 
                     try:
                         print(f'Base branch is Main, lets creates release notes')
-                        payload_release = {f"tag_name": f"{head}"}
+                        payload_release = {f"tag_name": f"{head}", f"name": f"Version {head}"}
                         release_call = requests.post(
                             base_url+create_release_api, headers=headers, json=payload_release)
 
