@@ -55,9 +55,10 @@ def pr_create(repo, token, branch, owner, head, pr):
     try:
         if branch == 'main_django_3_2':
             print(f'{head} and main_django_3_2 merged, creating Release')
+            set_upd = "\n".join(messageset)
             payload_release = {f"tag_name": f"{head}",
                                f"name": f"Version {head}",
-                               f"body": f"Summary {"\n".join(messageset)}"}
+                               f"body": f"Summary {set_upd}"}
             release_call = requests.post(
                 base_url+create_release_api, headers=headers, json=payload_release)
 
