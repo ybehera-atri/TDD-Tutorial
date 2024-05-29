@@ -19,7 +19,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     branch = branch_name  # base branch name of this PR
     base_url = f'https://api.github.com/'
     reviewer_api = f'repos/{repository}/pulls/{pull_num}/requested_reviewers'
-    committer_api = f'repos/{repository}/pulls/{pull_num}/commits?per_page=250'
+    committer_api = f'repos/{repository}/pulls/{pull_num}/commits?per_page=100'
     update_pr_api = f'repos/{repository}/pulls/{pull_num}'
     create_release_api = f'repos/{repository}/releases'
     commit_comments_api = f'repos/{repository}/comments?per_page=25'
@@ -64,10 +64,10 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     except Exception as e:
         print(f'Exception occurred with error {e}')
         
-    # grab the commit comments
+    # grab the commit message
     try:
-        response = requests.get(base_url + commit_comments_api, headers=headers)
-        print(repository)
+        response = requests.get(base_url + committer_api, headers=headers)
+        print(response)
         
 #        if comments.status_code == 200:
 #            print(f'Below are the comments')
