@@ -70,7 +70,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
         if comments.status_code == 200:
             print(f'Below are the comments')
             for comment in comments:
-                print(comment[0])
+                print(comment[2])
         else:
             print(f'Error with the API call, {comments.status_code}')     
 
