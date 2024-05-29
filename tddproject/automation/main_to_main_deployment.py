@@ -41,8 +41,11 @@ def pr_create(repo, token, branch, owner, head, pr):
         for names in data_json:
             committer_msg = names.get('commit').get("message")
             message = re.sub(pattern, '', committer_msg)
-            messageset.add(message) # set with messages
-            git_task = re.findall(pattern, committer_msg)
+            if message == 'Merge pull request':
+                break
+            else:
+                messageset.add(message) # set with messages
+                git_task = re.findall(pattern, committer_msg)
             print(f"{message.split(']')[0]}:{git_task[0]}")
 
     except Exception as e:
@@ -54,7 +57,7 @@ def pr_create(repo, token, branch, owner, head, pr):
             print(f'{head} and main_django_3_2 merged, creating Release')
             payload_release = {f"tag_name": f"{head}",
                                f"name": f"Version {head}",
-                               f"body": f"Summary {messageset}"}
+                               f"body": f"Summary {"\n".join(messageset)}"}
             release_call = requests.post(
                 base_url+create_release_api, headers=headers, json=payload_release)
 
