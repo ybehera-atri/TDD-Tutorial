@@ -67,7 +67,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     # grab the commit comments
     try:
         comments = requests.get(base_url + commit_comments_api, headers=headers)  
-        comment_json = comments.json()
+        comment_json = json(comments)
         if comments.status_code == 200:
             print(f'Below are the comments')
             for comment in comment_json:
