@@ -21,13 +21,6 @@ jobs:
       with:
         python-version: "3.8"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pytest
-        pip install requests
-        if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
-
     - name: Trigger PR from main_3_2 to main_3_2_deployment
       env:
         GITHUB_PAT: ${{ secrets.AUTOMATION_PAT }}
@@ -37,5 +30,6 @@ jobs:
         PR_USER: ${{ github.actor }}
         OWNER: ${{ github.repository_owner }}
         HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+        JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
 
       run: cd tddproject/automation; python3 main_to_main_deployment.py
