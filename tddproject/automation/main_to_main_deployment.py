@@ -3,6 +3,8 @@
 # Adds version name to PR
 # Associated with trigger_main_to_deployment_pr.yml
 # Creates a Release
+# Adds commits messages to summary
+# 
 
 import requests  # type: ignore
 import json
