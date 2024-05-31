@@ -102,8 +102,9 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                 base_jira+issue_details_api+tasks, headers=headers_jira, auth=auth)
             
             json_data = json.loads(jira_issues.text)
-            for desc in json_data['description']:
-                print(desc)
+            print(type(json_data))
+            print(json_data)
+            
 
     except Exception as e:
         print(f'Error occurred while fetching issues from Jira {e}')
