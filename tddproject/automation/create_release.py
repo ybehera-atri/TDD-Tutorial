@@ -101,8 +101,11 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
             jira_issues = requests.get(
                 base_jira+issue_details_api+tasks, headers=headers_jira, auth=auth)
             
-            json_data = json.dumps(json.loads(jira_issues.text))
-            print(json.loads(json_data)['description'])
+            if jira_issues.status_code == 200:
+                issue_data = jira_issues.json()
+
+                description = issue_data['fields'].get('description', 'No description found')
+                print(f'{tasks}:{description}')
             
 
     except Exception as e:
