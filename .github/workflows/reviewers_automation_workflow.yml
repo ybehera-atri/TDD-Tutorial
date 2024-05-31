@@ -23,6 +23,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         pip install requests
+        pip install pandas
         if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
 
     - name: Reviewer check
