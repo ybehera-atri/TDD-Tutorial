@@ -103,7 +103,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     try:
 
         if branch == 'main_django_3_2':
-            print(base_url+create_pr_api)
+            #print(base_url+create_pr_api)
             create_pr = requests.post(
                 base_url+create_pr_api, headers=headers, json=payload)
 
