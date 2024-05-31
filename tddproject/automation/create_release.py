@@ -37,7 +37,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     version_jira_api = f'rest/api/3/version'
     issue_details_api = f'/rest/api/2/issue/'
     auth = HTTPBasicAuth("ybehera@atrihub.io", jira_token)
-    headers = {
+    headers_jira = {
         "Accept": "application/json"
     }
 
@@ -99,7 +99,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
         for tasks in jiratask:
 
             jira_issues = requests.get(
-                base_jira+issue_details_api+tasks, headers=headers, auth=auth)
+                base_jira+issue_details_api+tasks, headers=headers_jira, auth=auth)
 
             print(json.dumps(json.loads(jira_issues.text)))
 
