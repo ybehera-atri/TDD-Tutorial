@@ -39,4 +39,4 @@ jobs:
         HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
         JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
 
-      run: cd tddproject/automation; python3 main_to_main_deployment.py
+      run: cd tddproject/automation; python3 create_release.py
