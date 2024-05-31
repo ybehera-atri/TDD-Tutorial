@@ -101,8 +101,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
             jira_issues = requests.get(
                 base_jira+issue_details_api+tasks, headers=headers_jira, auth=auth)
             
-            json_data = json.loads(jira_issues.text)['description']
-
+            json_data = json.loads(jira_issues.text)
             for desc in json_data['description']:
                 print(desc)
 
