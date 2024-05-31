@@ -102,8 +102,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                 base_jira+issue_details_api+tasks, headers=headers_jira, auth=auth)
             
             json_data = json.loads(jira_issues.text)
-            print(type(json_data))
-            print(json_data)
+            print(json_data['status']['description'])
             
 
     except Exception as e:
