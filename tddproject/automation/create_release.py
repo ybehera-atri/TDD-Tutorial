@@ -2,7 +2,7 @@
 # Automation code to update label as "Deployment" when PR main_3_2 to main_3_2_deployment
 # Adds version name to PR
 # Associated with trigger_main_to_deployment_pr.yml
-# Creates a Release
+# Creates a Release in Github
 # Adds commits messages to summary
 #
 
