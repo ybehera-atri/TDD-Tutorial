@@ -64,7 +64,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
             # print(f"{message.split(']')[0]}:{git_task[0]}")
 
     except Exception as e:
-        print(f'Exception occurred with error {e}')
+        print(f'{e}, no action required')
 
     # check and create pr if base branch is main, switch main_yb with main_3_2
     try:
