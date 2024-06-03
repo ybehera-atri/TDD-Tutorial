@@ -105,8 +105,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                 issue_data = jira_issues.json()
 
                 description = issue_data['fields'].get('description', 'No description found')
-                type = issue_data['fields'].get('issuetype',{}).get('name', 'No task type found')
-                print(f'{tasks}:{description}:{type}')
+                print(f'{tasks}:{description}')
             
 
     except Exception as e:

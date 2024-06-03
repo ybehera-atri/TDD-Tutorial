@@ -35,4 +35,4 @@ jobs:
         PR_USER: ${{ github.actor }}
         HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
 
-      run: cd tddproject/automation; python3 reviewer_automation_code.py 
+      run: python3 reviewer_automation_code.py 
