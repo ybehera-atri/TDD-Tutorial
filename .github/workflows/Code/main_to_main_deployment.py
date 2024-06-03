@@ -2,22 +2,19 @@
 # Automation code to update label as "Deployment" when PR main_3_2 to main_3_2_deployment
 # Adds version name to PR
 # Associated with trigger_main_to_deployment_pr.yml
-# Creates a Release in Github
+# Creates a Release
 # Adds commits messages to summary
-# Fetches data from Jira
+# 
 
 import requests  # type: ignore
 import json
 import os
 import re
-from requests.auth import HTTPBasicAuth  # type: ignore
-import pandas as pd  # type: ignore
 
 base_url = f'https://api.github.com/'
-base_jira = f'https://atrihub.atlassian.net/'
 
 
-def pr_create(repo, token, branch, owner, head, pr, jira_token):
+def pr_create(repo, token, branch, owner, head, pr):
 
     headers = {f"Authorization": f"token {token}",
                f"Accept": f"application/vnd.github+json"}
@@ -33,18 +30,9 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     create_release_api = f'repos/{repo}/releases'
     committer_api = f'repos/{repo}/pulls/{pr}/commits?per_page=100'
 
-    # Jira
-    version_jira_api = f'rest/api/3/version'
-    issue_details_api = f'/rest/api/2/issue/'
-    auth = HTTPBasicAuth("ybehera@atrihub.io", jira_token)
-    headers_jira = {
-        "Accept": "application/json"
-    }
-
     # grab commit messages
     try:
         messageset = set()
-        jiratask = set()
         # committers information, user and committ message
         committers_info = requests.get(
             base_url + committer_api, headers=headers)
@@ -57,19 +45,37 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
             message = re.sub(pattern, '', committer_msg)
             git_task = re.findall(pattern, committer_msg)
             if 'Merge pull request' not in message:
-                # commit messages in a set
                 messageset.add(message.split(']')[0])
-            jiratask.add(git_task[0])  # jira tasks from commits in a set
-            # print(f"{message.split(']')[0]}:{git_task[0]}")
+            #print(f"{message.split(']')[0]}:{git_task[0]}")
 
     except Exception as e:
         print(f'Exception occurred with error {e}')
+
+    # Create release on version main merge
+    try:
+        if branch == 'main_django_3_2':
+            print(f'{head} and main_django_3_2 merged, creating Release')
+            set_upd = "\n".join(f"- {line}" for line in messageset)
+            payload_release = {f"tag_name": f"{head}",
+                               f"name": f"Version {head}",
+                               f"body": f"## **Summary**\n {set_upd}"}
+            release_call = requests.post(
+                base_url+create_release_api, headers=headers, json=payload_release)
+
+            if release_call.status_code == 201:
+                print(f'Release notes created')
+            else:
+                print(
+                    f'Error creating Release notes {release_call.content}')
+
+    except Exception as e:
+        print(f'Exception occurred during release creation {e}')
 
     # check and create pr if base branch is main, switch main_yb with main_3_2
     try:
 
         if branch == 'main_django_3_2':
-            #print(base_url+create_pr_api)
+            print(base_url+create_pr_api)
             create_pr = requests.post(
                 base_url+create_pr_api, headers=headers, json=payload)
 
@@ -94,47 +100,10 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     except Exception as e:
         print(f'Error occurred with exception {e}')
 
-    # Get issues data from Jira and update in github release page (JIRA Issues in github release body)
-    try:
-        for tasks in jiratask:
-
-            jira_issues = requests.get(
-                base_jira+issue_details_api+tasks, headers=headers_jira, auth=auth)
-            
-            if jira_issues.status_code == 200:
-                issue_data = jira_issues.json()
-
-                description = issue_data['fields'].get('description', 'No description found')
-                print(f'{tasks}:{description}')
-            
-
-    except Exception as e:
-        print(f'Error occurred while fetching issues from Jira {e}')
-
-    # Create Jira release and add release url to github release below
-
-    # Create github release on version main merge
-    try:
-        if branch == 'main_django_3_2':
-            print(f'{head} and main_django_3_2 merged, creating Release')
-            set_upd = "\n".join(f"- {line}" for line in messageset)
-            payload_release = {f"tag_name": f"{head}",
-                               f"name": f"Version {head}",
-                               f"body": f"## **Summary**\n {set_upd}"}
-            release_call = requests.post(
-                base_url+create_release_api, headers=headers, json=payload_release)
-
-            if release_call.status_code == 201:
-                print(f'Release notes created')
-            else:
-                print(
-                    f'Error creating Release notes {release_call.content}')
-
-    except Exception as e:
-        print(f'Exception occurred during release creation {e}')    
-
 
 # call the function with environment variables from yaml as parameters
 pr_create(os.getenv('GITHUB_REPOSITORY'), os.getenv('GITHUB_PAT'),
           os.getenv('BRANCH_NAME'), os.getenv('OWNER'), os.getenv('HEAD_BRANCH'), os.getenv(
-    'PULL_NUMBER'), os.getenv('JIRA_TOKEN'))
+    'PULL_NUMBER'))
+
+
