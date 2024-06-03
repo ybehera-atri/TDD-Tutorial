@@ -4,7 +4,7 @@
 # Associated with trigger_main_to_deployment_pr.yml
 # Creates a Release in Github
 # Adds commits messages to summary
-#
+# Fetches data from Jira
 
 import requests  # type: ignore
 import json
@@ -138,4 +138,3 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
 pr_create(os.getenv('GITHUB_REPOSITORY'), os.getenv('GITHUB_PAT'),
           os.getenv('BRANCH_NAME'), os.getenv('OWNER'), os.getenv('HEAD_BRANCH'), os.getenv(
     'PULL_NUMBER'), os.getenv('JIRA_TOKEN'))
-#
