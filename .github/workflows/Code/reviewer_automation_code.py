@@ -65,19 +65,19 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
     # check the current reviewers requested
     try:
 
-    #    reviewers_check = requests.get(
-    #        base_url + reviewer_api, headers=headers).json()
+        reviewers_check = requests.get(
+            base_url + reviewer_api, headers=headers).json()
 
-    #    reviewers_requested = reviewers_check['users']  # reviewers
+        reviewers_requested = reviewers_check['users']  # reviewers
         # list with reviewers not requested
-    #    list_new = [i for i in reviewer_list if i not in reviewers_requested]
+        list_new = [i for i in reviewer_list if i not in reviewers_requested]
 
-    #    if len(list_new) >= 0:
-    #        print(f'Managers {list_new} missing, adding them as reviewers')
+        if len(list_new) >= 0:
+            print(f'Managers {list_new} missing, adding them as reviewers') # adds manager to reviewer list
 
-    #    elif all(x in reviewers_requested for x in reviewer_list):
-    #        print(
-    #            f'All managers {reviewer_list} already requested')
+        elif all(x in reviewers_requested for x in reviewer_list):
+            print(
+                f'All managers {reviewer_list} already requested')
 
         # Adding committers as reviewers only if base branch is version and extracting messages
         # Remove additional branch names in prod below

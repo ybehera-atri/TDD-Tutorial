@@ -40,4 +40,4 @@ jobs:
         HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
         JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
 
-      run: cd tddproject/automation; python3 create_release_pr.py
+      run: cd .github/workflows/Code; python3 create_release_pr.py
