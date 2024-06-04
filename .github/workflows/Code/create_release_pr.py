@@ -134,7 +134,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
             set_upd = "\n".join(f"- {line}" for line in messageset)
             payload_release = {f"tag_name": f"{head}",
                                f"name": f"Version {head}",
-                               f"body": f"## **Summary**\n {set_upd} \n Github Releases "}
+                               f"body": f"## **Summary**\n {set_upd} \n Github Releases \n JIRA Release \n JIRA Issues \n {df} "}
             release_call = requests.post(
                 base_url+create_release_api, headers=headers, json=payload_release)
 
