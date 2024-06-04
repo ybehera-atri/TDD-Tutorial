@@ -42,6 +42,17 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
         "Accept": "application/json"
     }
 
+    # Dataframe
+    data = {
+        'JIRA-key in Commit' : [],
+        'JIRA-key' : [],
+        'Description' : [],
+        'Type' : [],
+        'Release' : []
+        }
+    df = pd.DataFrame(data)
+
+
     # grab commit messages
     try:
         messageset = set()
@@ -108,6 +119,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                 description = issue_data['fields'].get('description', 'No description found')
                 type = issue_data['fields'].get('issuetype',{}).get('name', 'No task type found')
                 print(f'{tasks}:{description}:{type}')
+                df = df.append({'JIRA-key in Commit': tasks, 'JIRA-key': tasks, 'Description': description, 'Type': type },index=False)
             
 
     except Exception as e:
@@ -122,7 +134,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
             set_upd = "\n".join(f"- {line}" for line in messageset)
             payload_release = {f"tag_name": f"{head}",
                                f"name": f"Version {head}",
-                               f"body": f"## **Summary**\n {set_upd}"}
+                               f"body": f"## **Summary**\n {set_upd} \n Github Releases "}
             release_call = requests.post(
                 base_url+create_release_api, headers=headers, json=payload_release)
 
@@ -140,4 +152,3 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
 pr_create(os.getenv('GITHUB_REPOSITORY'), os.getenv('GITHUB_PAT'),
           os.getenv('BRANCH_NAME'), os.getenv('OWNER'), os.getenv('HEAD_BRANCH'), os.getenv(
     'PULL_NUMBER'), os.getenv('JIRA_TOKEN'))
-#
