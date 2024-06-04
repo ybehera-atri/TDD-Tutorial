@@ -45,8 +45,8 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     # Dataframe
     j_key = []
     desc = []
-    # j_type = []
-    release = []
+    j_type = []
+    #release = []
 
     # grab commit messages
     try:
@@ -117,6 +117,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                     'name', 'No task type found')
                 j_key.append(tasks)
                 desc.append(description)
+                j_type.append(type_jira)
                 print(f'{tasks}:{description}:{type_jira}')
 
     except Exception as e:
@@ -127,13 +128,11 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     # Create github release on version main merge
     try:
         if branch == 'main_django_3_2':
-            #df = pd.DataFrame({'JIRA-key in Commit': tasks,
-            #                  'JIRA-key': tasks }, index=False)  # dataframe
-            #print(df)
-            print(j_key)
-            print(type(j_key))
-            print(description)
-            print(type(description))
+            df = pd.DataFrame({'JIRA-key in Commit': j_key,
+                              'JIRA-key': j_key, 'Description': desc, 'Type': j_type }, index=False)  # dataframe
+            print(df)
+            #print(j_key)
+            #print(desc)
             print(f'{head} and main_django_3_2 merged, creating Release')
             set_upd = "\n".join(f"- {line}" for line in messageset)
             payload_release = {f"tag_name": f"{head}",
