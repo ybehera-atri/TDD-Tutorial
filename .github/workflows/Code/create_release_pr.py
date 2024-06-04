@@ -13,9 +13,7 @@ import os
 import re
 from requests.auth import HTTPBasicAuth  # type: ignore
 import pandas as pd  # type: ignore
-from tabulate import tabulate # type: ignore
-from prettytable import PrettyTable
-import textwrap
+from tabulate import tabulate  # type: ignore
 
 base_url = f'https://api.github.com/'
 base_jira = f'https://atrihub.atlassian.net/'
@@ -133,9 +131,8 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
         if branch == 'main_django_3_2':
             df = pd.DataFrame({'JIRA-key in Commit': j_key,
                               'JIRA-key': j_key, 'Description': desc, 'Type': j_type})  # dataframe
-            df['Description'] = df['Description'].apply(lambda x: '\n'.join(textwrap.wrap(x, width=40)))
-            df_str = tabulate(df, headers='keys', tablefmt='github', showindex=False)
-            #df_str = df.to_string(index=False)  # dataframe as string
+            df_str = tabulate(df, headers='keys',
+                              tablefmt='github', showindex=False)
             print(f'{head} and main_django_3_2 merged, creating Release')
             set_upd = "\n".join(f"- {line}" for line in messageset)
             payload_release = {f"tag_name": f"{head}",
