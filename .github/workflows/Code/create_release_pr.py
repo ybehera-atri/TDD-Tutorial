@@ -5,7 +5,7 @@
 # Creates a Release in Github
 # Adds commits messages to summary
 # Fetches data from Jira
-#
+# Creates Jira Version
 
 import requests  # type: ignore
 import json
