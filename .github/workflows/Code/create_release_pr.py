@@ -6,6 +6,7 @@
 # Adds commits messages to summary
 # Fetches data from Jira
 # Creates Jira Version
+#
 
 import requests  # type: ignore
 import json
@@ -52,7 +53,6 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     g_release = '\n\n### Github Releases'
     j_release = '\n\n### JIRA Release'
     j_issue = '\n\n### JIRA Issues'
-
 
     # grab commit messages
     try:
@@ -124,7 +124,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                 j_key.append(tasks)  # lists to input into dataframe
                 desc.append(description)
                 j_type.append(type_jira)
-                #print(f'{tasks}:{description}:{type_jira}')
+                # print(f'{tasks}:{description}:{type_jira}')
 
     except Exception as e:
         print(f'Error occurred while fetching issues from Jira {e}')
