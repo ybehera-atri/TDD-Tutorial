@@ -48,10 +48,10 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     desc = []
     j_type = []
     # release = []
-    summary = '## **Summary**'
-    g_release = '## **Github Releases**'
-    j_release = '## **JIRA Release**'
-    j_issue = '## **JIRA Issues**'
+    summary = '### Summary'
+    g_release = '\n\n### Github Releases'
+    j_release = '\n\n### JIRA Release'
+    j_issue = '\n\n### JIRA Issues'
 
 
     # grab commit messages
@@ -142,7 +142,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
             set_upd = "\n".join(f"- {line}" for line in messageset)
             payload_release = {f"tag_name": f"{head}",
                                f"name": f"Version {head}",
-                               f"body": f"{summary}\n{set_upd}\n\n{g_release}\n\n{j_release}\n\n{j_issue}\n{df_str}"}
+                               f"body": f"{summary}\n{set_upd}{g_release}{j_release}{j_issue}\n{df_str}"}
             release_call = requests.post(
                 base_url+create_release_api, headers=headers, json=payload_release)
 
