@@ -129,8 +129,8 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     try:
         if branch == 'main_django_3_2':
             df = pd.DataFrame({'JIRA-key in Commit': j_key,
-                              'JIRA-key': j_key, 'Description': desc, 'Type': j_type }, index=False)  # dataframe
-            print(df)
+                              'JIRA-key': j_key, 'Description': desc, 'Type': j_type })  # dataframe
+            print(df.to_string(index=False))
             #print(j_key)
             #print(desc)
             print(f'{head} and main_django_3_2 merged, creating Release')
