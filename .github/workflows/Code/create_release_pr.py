@@ -113,11 +113,11 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
 
                 description = issue_data['fields'].get(
                     'description', 'No description found')
-                type = issue_data['fields'].get('issuetype', {}).get(
+                type_jira = issue_data['fields'].get('issuetype', {}).get(
                     'name', 'No task type found')
                 j_key.append(tasks)
                 desc.append(description)
-                print(f'{tasks}:{description}:{type}')
+                print(f'{tasks}:{description}:{type_jira}')
 
     except Exception as e:
         print(f'Error occurred while fetching issues from Jira {e}')
