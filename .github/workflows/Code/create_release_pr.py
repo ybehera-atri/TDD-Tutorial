@@ -127,9 +127,13 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     # Create github release on version main merge
     try:
         if branch == 'main_django_3_2':
-            df = pd.DataFrame({'JIRA-key in Commit': tasks,
-                              'JIRA-key': tasks, }, index=False)  # dataframe
-            print(df)
+            #df = pd.DataFrame({'JIRA-key in Commit': tasks,
+            #                  'JIRA-key': tasks }, index=False)  # dataframe
+            #print(df)
+            print(j_key)
+            print(type(j_key))
+            print(description)
+            print(type(description))
             print(f'{head} and main_django_3_2 merged, creating Release')
             set_upd = "\n".join(f"- {line}" for line in messageset)
             payload_release = {f"tag_name": f"{head}",
