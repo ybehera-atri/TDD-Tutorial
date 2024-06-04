@@ -46,7 +46,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     j_key = []
     desc = []
     j_type = []
-    #release = []
+    # release = []
 
     # grab commit messages
     try:
@@ -115,7 +115,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                     'description', 'No description found')
                 type_jira = issue_data['fields'].get('issuetype', {}).get(
                     'name', 'No task type found')
-                j_key.append(tasks)
+                j_key.append(tasks)  # lists to input into dataframe
                 desc.append(description)
                 j_type.append(type_jira)
                 print(f'{tasks}:{description}:{type_jira}')
@@ -129,15 +129,15 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     try:
         if branch == 'main_django_3_2':
             df = pd.DataFrame({'JIRA-key in Commit': j_key,
-                              'JIRA-key': j_key, 'Description': desc, 'Type': j_type })  # dataframe
-            print(df.to_string(index=False))
-            #print(j_key)
-            #print(desc)
+                              'JIRA-key': j_key, 'Description': desc, 'Type': j_type})  # dataframe
+            df_str = df.to_string(index=False)  # dataframe as string
+            # print(j_key)
+            # print(desc)
             print(f'{head} and main_django_3_2 merged, creating Release')
             set_upd = "\n".join(f"- {line}" for line in messageset)
             payload_release = {f"tag_name": f"{head}",
                                f"name": f"Version {head}",
-                               f"body": f"## **Summary**\n {set_upd} \n \n \n Github Releases \n \n \n JIRA Release \n \n \n JIRA Issues \n \n "}
+                               f"body": f"## **Summary** \n {set_upd} \n \n \n ## **Github Releases** \n \n \n ## **JIRA Release** \n \n \n ## **JIRA Issues** \n \n {df_str}"}
             release_call = requests.post(
                 base_url+create_release_api, headers=headers, json=payload_release)
 
