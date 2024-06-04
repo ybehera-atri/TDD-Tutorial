@@ -128,12 +128,13 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     try:
         if branch == 'main_django_3_2':
             df = pd.DataFrame({'JIRA-key in Commit': tasks,
-                              'JIRA-key': tasks, })  # dataframe
+                              'JIRA-key': tasks, }, index=False)  # dataframe
+            print(df)
             print(f'{head} and main_django_3_2 merged, creating Release')
             set_upd = "\n".join(f"- {line}" for line in messageset)
             payload_release = {f"tag_name": f"{head}",
                                f"name": f"Version {head}",
-                               f"body": f"## **Summary**\n {set_upd} \n \n \n Github Releases \n \n \n JIRA Release \n \n \n JIRA Issues \n \n {df} "}
+                               f"body": f"## **Summary**\n {set_upd} \n \n \n Github Releases \n \n \n JIRA Release \n \n \n JIRA Issues \n \n "}
             release_call = requests.post(
                 base_url+create_release_api, headers=headers, json=payload_release)
 
