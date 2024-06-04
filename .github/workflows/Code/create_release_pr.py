@@ -15,6 +15,7 @@ from requests.auth import HTTPBasicAuth  # type: ignore
 import pandas as pd  # type: ignore
 from tabulate import tabulate # type: ignore
 from prettytable import PrettyTable
+import textwrap
 
 base_url = f'https://api.github.com/'
 base_jira = f'https://atrihub.atlassian.net/'
@@ -132,17 +133,14 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
         if branch == 'main_django_3_2':
             df = pd.DataFrame({'JIRA-key in Commit': j_key,
                               'JIRA-key': j_key, 'Description': desc, 'Type': j_type})  # dataframe
-            #df_str = tabulate(df, headers='keys', tablefmt='fancy_grid', showindex=False)
+            df['desc'] = df['desc'].apply(lambda x: '\n'.join(textwrap.wrap(x, width=40)))
+            df_str = tabulate(df, headers='keys', tablefmt='fancy_grid', showindex=False)
             #df_str = df.to_string(index=False)  # dataframe as string
-            table = PrettyTable
-            table.field_names = df.columns.tolist()
-            for _, row in df.iterrows():
-                table.add_row(row.tolist())
             print(f'{head} and main_django_3_2 merged, creating Release')
             set_upd = "\n".join(f"- {line}" for line in messageset)
             payload_release = {f"tag_name": f"{head}",
                                f"name": f"Version {head}",
-                               f"body": f"## **Summary** \n {set_upd} \n \n \n ## **Github Releases** \n \n \n ## **JIRA Release** \n \n \n ## **JIRA Issues** \n \n {table}"}
+                               f"body": f"## **Summary** \n {set_upd} \n \n \n ## **Github Releases** \n \n \n ## **JIRA Release** \n \n \n ## **JIRA Issues** \n \n {df_str}"}
             release_call = requests.post(
                 base_url+create_release_api, headers=headers, json=payload_release)
 
