@@ -28,6 +28,7 @@ jobs:
         pip install requests
         pip install pandas
         pip install tabulate
+        pip install prettytable
         if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
 
     - name: Trigger PR from main_3_2 to main_3_2_deployment
