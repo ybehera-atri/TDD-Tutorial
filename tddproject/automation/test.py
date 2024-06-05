@@ -5,6 +5,8 @@
 # Creates a Release in Github
 # Adds commits messages to summary
 # Fetches data from Jira
+# Creates Jira Version
+#
 
 import requests  # type: ignore
 import json
@@ -12,6 +14,7 @@ import os
 import re
 from requests.auth import HTTPBasicAuth  # type: ignore
 import pandas as pd  # type: ignore
+from tabulate import tabulate  # type: ignore
 
 base_url = f'https://api.github.com/'
 base_jira = f'https://atrihub.atlassian.net/'
@@ -41,6 +44,16 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
         "Accept": "application/json"
     }
 
+    # Dataframe
+    j_key = []
+    desc = []
+    j_type = []
+    # release = []
+    summary = '### Summary'
+    g_release = '\n\n### Github Releases'
+    j_release = '\n\n### JIRA Release'
+    j_issue = '\n\n### JIRA Issues'
+
     # grab commit messages
     try:
         messageset = set()
@@ -63,13 +76,13 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
             # print(f"{message.split(']')[0]}:{git_task[0]}")
 
     except Exception as e:
-        print(f'Exception occurred with error {e}')
+        print(f'{e}, no action required')
 
     # check and create pr if base branch is main, switch main_yb with main_3_2
     try:
 
         if branch == 'main_django_3_2':
-            #print(base_url+create_pr_api)
+            # print(base_url+create_pr_api)
             create_pr = requests.post(
                 base_url+create_pr_api, headers=headers, json=payload)
 
@@ -100,13 +113,18 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
 
             jira_issues = requests.get(
                 base_jira+issue_details_api+tasks, headers=headers_jira, auth=auth)
-            
+
             if jira_issues.status_code == 200:
                 issue_data = jira_issues.json()
 
-                description = issue_data['fields'].get('description', 'No description found')
-                print(f'{tasks}:{description}')
-            
+                description = issue_data['fields'].get(
+                    'description', 'No description found')
+                type_jira = issue_data['fields'].get('issuetype', {}).get(
+                    'name', 'No task type found')
+                j_key.append(tasks)  # lists to input into dataframe
+                desc.append(description)
+                j_type.append(type_jira)
+                # print(f'{tasks}:{description}:{type_jira}')
 
     except Exception as e:
         print(f'Error occurred while fetching issues from Jira {e}')
@@ -116,11 +134,15 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     # Create github release on version main merge
     try:
         if branch == 'main_django_3_2':
+            df = pd.DataFrame({'JIRA-key in Commit': j_key,
+                              'JIRA-key': j_key, 'Description': desc, 'Type': j_type})  # dataframe
+            df_str = tabulate(df, headers='keys',
+                              tablefmt='github', showindex=False)
             print(f'{head} and main_django_3_2 merged, creating Release')
             set_upd = "\n".join(f"- {line}" for line in messageset)
             payload_release = {f"tag_name": f"{head}",
                                f"name": f"Version {head}",
-                               f"body": f"## **Summary**\n {set_upd}"}
+                               f"body": f"{summary}\n{set_upd}{g_release}{j_release}{j_issue}\n{df_str}"}
             release_call = requests.post(
                 base_url+create_release_api, headers=headers, json=payload_release)
 
@@ -131,7 +153,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                     f'Error creating Release notes {release_call.content}')
 
     except Exception as e:
-        print(f'Exception occurred during release creation {e}')    
+        print(f'Exception occurred during release creation {e}')
 
 
 # call the function with environment variables from yaml as parameters
