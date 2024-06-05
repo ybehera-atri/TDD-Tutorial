@@ -49,6 +49,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     j_key = []
     desc = []
     j_type = []
+    proj_id = []
     # release = []
     summary = '### Summary'
     g_release = '\n\n### Github Releases'
@@ -122,9 +123,14 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                     'description', 'No description found')
                 type_jira = issue_data['fields'].get('issuetype', {}).get(
                     'name', 'No task type found')
+                proj = issue_data['fields'].get('project', {})
+                proj_name = proj.get('name')  # project name
+                projid = proj.get('id')  # project id
                 j_key.append(tasks)  # lists to input into dataframe
                 desc.append(description)
                 j_type.append(type_jira)
+                if projid not in proj_id:
+                    proj_id.append(projid)
                 # print(f'{tasks}:{description}:{type_jira}')
 
     except Exception as e:
@@ -133,18 +139,19 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     # Create Jira release and add release url to github release below
     try:
         if branch == 'main_django_3_2':
-            #today = str(date.today())
+            # today = str(date.today())
             payload_version = json.dumps({
                 "description": "An excellent version",
                 "name": "New Version 1",
-                "projectId": 10000,
+                "projectId": int(projid[0]),
             })
 
             jira_version_create = requests.post(
                 base_jira+version_jira_api, headers=headers_jira, data=payload_version, auth=auth)
 
             if jira_version_create.status_code == 201:
-                print(f'Initial Jira Release created, now updating with issues {jira_version_create}')
+                print(
+                    f'Initial Jira Release created, now updating with issues {jira_version_create}')
 
             else:
                 print(
