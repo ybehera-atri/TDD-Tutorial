@@ -132,6 +132,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                 j_type.append(type_jira)
                 if projid not in proj_id:
                     proj_id.append(projid)
+                    #print(proj_id)
                 # print(f'{tasks}:{description}:{type_jira}')
 
     except Exception as e:
@@ -141,11 +142,11 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     try:
         if branch == 'main_django_3_2':
             # today = str(date.today())
-            print(f'Project id is {int(projid[0])} and type is {type(int(projid[0]))}')
+            print(f'Project id is {int(proj_id[0])} and type is {type(int(proj_id[0]))}')
             payload_version = json.dumps({
                 "description": "An excellent version",
                 "name": "New Version 1",
-                "projectId": int(projid[0]),
+                "projectId": int(proj_id[0]),
             })
 
             jira_version_create = requests.post(
