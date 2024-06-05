@@ -5,6 +5,7 @@
 # Creates a Release in Github
 # Adds commits messages to summary
 # Fetches data from Jira
+# Creates Jira Version
 #
 
 import requests  # type: ignore
@@ -14,6 +15,7 @@ import re
 from requests.auth import HTTPBasicAuth  # type: ignore
 import pandas as pd  # type: ignore
 from tabulate import tabulate  # type: ignore
+from datetime import date
 
 base_url = f'https://api.github.com/'
 base_jira = f'https://atrihub.atlassian.net/'
@@ -52,7 +54,6 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     g_release = '\n\n### Github Releases'
     j_release = '\n\n### JIRA Release'
     j_issue = '\n\n### JIRA Issues'
-
 
     # grab commit messages
     try:
@@ -124,12 +125,36 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                 j_key.append(tasks)  # lists to input into dataframe
                 desc.append(description)
                 j_type.append(type_jira)
-                #print(f'{tasks}:{description}:{type_jira}')
+                # print(f'{tasks}:{description}:{type_jira}')
 
     except Exception as e:
         print(f'Error occurred while fetching issues from Jira {e}')
 
     # Create Jira release and add release url to github release below
+    try:
+        if branch == 'main_django_3_2':
+            today = str(date.today())
+            payload_version = json.dumps({
+                "archived": False,
+                "description": "An excellent version",
+                "name": "New Version 1",
+                "projectId": 10000,
+                "releaseDate": today,
+                "released": True
+            })
+
+            jira_version_create = requests.post(
+                base_jira+version_jira_api, headers=headers_jira, data=payload_version, auth=auth)
+
+            if jira_version_create.status_code == 201:
+                print(f'Initial Jira Release created, now updating with issues')
+
+            else:
+                print(
+                    f'Error creating Jira Release, {jira_version_create.content}')
+
+    except Exception as e:
+        print(f'Exception occurred during release creation {e}')
 
     # Create github release on version main merge
     try:
