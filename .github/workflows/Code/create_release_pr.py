@@ -42,7 +42,8 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     issue_details_api = f'/rest/api/2/issue/'
     auth = HTTPBasicAuth("ybehera@atrihub.io", jira_token)
     headers_jira = {
-        "Accept": "application/json"
+        "Accept": "application/json",
+        "Content-Type": "application/json"
     }
 
     # Dataframe
