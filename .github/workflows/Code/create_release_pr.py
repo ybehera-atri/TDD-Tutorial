@@ -141,6 +141,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     try:
         if branch == 'main_django_3_2':
             # today = str(date.today())
+            print(f'Project id is {int(projid[0])} and type is {type(int(projid[0]))}')
             payload_version = json.dumps({
                 "description": "An excellent version",
                 "name": "New Version 1",
