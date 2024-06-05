@@ -130,6 +130,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                 j_key.append(tasks)  # lists to input into dataframe
                 desc.append(description)
                 j_type.append(type_jira)
+                print(proj_name)
                 if projid not in proj_id:
                     proj_id.append(projid)
                     #print(proj_id)
