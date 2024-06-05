@@ -133,25 +133,22 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     # Create Jira release and add release url to github release below
     try:
         if branch == 'main_django_3_2':
-            today = str(date.today())
+            #today = str(date.today())
             payload_version = json.dumps({
-                "archived": False,
                 "description": "An excellent version",
                 "name": "New Version 1",
                 "projectId": 10000,
-                "releaseDate": today,
-                "released": True
             })
 
             jira_version_create = requests.post(
                 base_jira+version_jira_api, headers=headers_jira, data=payload_version, auth=auth)
 
             if jira_version_create.status_code == 201:
-                print(f'Initial Jira Release created, now updating with issues')
+                print(f'Initial Jira Release created, now updating with issues {jira_version_create}')
 
             else:
                 print(
-                    f'Error creating Jira Release, {jira_version_create.content}')
+                    f'Error creating Jira Release, {jira_version_create.status_code} and error {jira_version_create.content}')
 
     except Exception as e:
         print(f'Exception occurred during release creation {e}')
