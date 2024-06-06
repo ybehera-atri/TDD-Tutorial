@@ -60,7 +60,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     # grab commit messages
     try:
         messageset = set()
-        jiratask = set()
+        jiratask = set()  # jira issues
         # committers information, user and committ message
         committers_info = requests.get(
             base_url + committer_api, headers=headers)
@@ -133,7 +133,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                 print(proj_name)
                 if projid not in proj_id:
                     proj_id.append(projid)
-                    #print(proj_id)
+                    # print(proj_id)
                 # print(f'{tasks}:{description}:{type_jira}')
 
     except Exception as e:
@@ -143,7 +143,8 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
     try:
         if branch == 'main_django_3_2':
             # today = str(date.today())
-            print(f'Project id is {int(proj_id[0])} and type is {type(int(proj_id[0]))}')
+            print(
+                f'Project id is {int(proj_id[0])} and type is {type(int(proj_id[0]))}')
             payload_version = json.dumps({
                 "description": "An excellent version",
                 "name": "New Version 1",
@@ -154,8 +155,13 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                 base_jira+version_jira_api, headers=headers_jira, data=payload_version, auth=auth)
 
             if jira_version_create.status_code == 201:
+                new_version = jira_version_create.json()  # id passed to the update jira api
                 print(
-                    f'Initial Jira Release created, now updating with issues {jira_version_create}')
+                    f'Initial Jira Release created: {new_version['name']} with id: {new_version['id']}, now updating with release with issues')
+
+                # Add version update here
+
+                # Move github release here, creates when jira version is created
 
             else:
                 print(
