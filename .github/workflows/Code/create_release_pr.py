@@ -173,9 +173,9 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token):
                         base_jira+issue_details_api+issue_key, headers=headers_jira, data=json.dumps(issue_data), auth=auth)
 
                     if issue_version.status_code == 200:
-                        print(f'{issue_key} added to {new_version['name']}')
+                        print(f'{issue_key} added')
                     else:
-                        print(f'Error updating issue {issue_key} to {new_version['name']}, error code {issue_version.status_code} and details: {issue_version.content}')
+                        print(f'Error updating issue {issue_key}, error code {issue_version.status_code} and details: {issue_version.content}')
 
                 # Move github release here, creates when jira version is created
 
