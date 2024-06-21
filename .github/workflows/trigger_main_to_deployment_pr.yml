@@ -1,4 +1,4 @@
-name: Trigger PR From main_3_2 To main_3_2_deployment On Version To Main Merge
+name: Trigger PR From main_3_2 To main_3_2_deployment On Version To Main Merge & Create Release
 
 on: 
   pull_request:
@@ -30,7 +30,7 @@ jobs:
         pip install tabulate
         if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
 
-    - name: Trigger PR from main_3_2 to main_3_2_deployment
+    - name: Trigger PR to main_3_2_deployment & Create Release
       env:
         GITHUB_PAT: ${{ secrets.AUTOMATION_PAT }}
         GITHUB_REPOSITORY: ${{ github.repository }}

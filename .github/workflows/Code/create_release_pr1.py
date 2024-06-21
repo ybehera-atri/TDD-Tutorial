@@ -9,7 +9,7 @@
 # Updates Jira version with issues
 # Creates ticket in Fresh service
 # Added checks for Jira, GitHub and Fresh Service
-#
+# 
 
 import base64
 import time
@@ -35,8 +35,8 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token, jira_user, fresh
                f"Accept": f"application/vnd.github+json"}
 
     payload = {"title": head,
-               "head": 'main_django_3_2',  # main_django_3_2
-               "base": 'main_django_3_2_deployment',  # main_django_3_2_deployment
+               "head": 'main_yb',  # main_django_3_2
+               "base": 'main_yb_deployment',  # main_django_3_2_deployment
                }  # switch branch names in prod
     create_pr_api = f'repos/{repo}/pulls'
 
@@ -45,7 +45,6 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token, jira_user, fresh
     create_label_api = f'repos/{repo}/issues/'
     create_release_api = f'repos/{repo}/releases'
     committer_api = f'repos/{repo}/pulls/{pr}/commits?per_page=100'
-    payload_git = 0
 
     # Freshservice APIs
     freshservice_createticket_api = f'/api/v2/tickets'
@@ -70,9 +69,7 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token, jira_user, fresh
     end_date = start_date + timedelta(days=3)
     jira_present = False
 
-    edc_plugins = ['edc_config', 'edc-plugin-msvr', 'edc-plugin-image-pipeline',
-                   'edc-plugin-data-pipeline', 'edc-meddra', 'edc_plugin_sae_report', 'edc_plugin_casebook', 'edc-bdd']
-    edcplugin_name = ''
+    edc_plugins = ['edc_config','edc-plugin-msvr','edc-plugin-image-pipeline','edc-plugin-data-pipeline','edc-meddra','edc_plugin_sae_report','edc_plugin_casebook','edc-bdd']
 
     # Dataframe
     j_key = []
@@ -81,7 +78,6 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token, jira_user, fresh
     proj_id = []
     proj_n = []
     output_release = []
-    edc_plugin_data = []
     summary = '### Summary'
     g_release = '\n\n### Github Releases'
     j_release = '\n\n### JIRA Release'
@@ -95,13 +91,11 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token, jira_user, fresh
             v_name = f'TRC_PAD'
             print(f'Version name in Jira is {v_name}')
             output_release.append("app.aptwebstudy.org")
-            print(f'The repo is TRC_PAD, no plugins')
 
         elif repo_name == f'TRC_PAD_SRS':
             v_name = f'TRC_PAD_SRS'
             print(f'Version name in Jira is {v_name}')
             output_release.append("srs.aptwebstudy.org")
-            print(f'The repo is TRC_PAD_SRS, no plugins')
 
         elif repo_name == f'EDC':
             v_name = f'EDC {head}'
@@ -137,48 +131,11 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token, jira_user, fresh
             output_release.append("trcds-test-1.atrihub.org")
             output_release.append("trcds.atrihub.org")
 
-            print(f'The repo is EDC, checking plugins')
-
-            for plugins in edc_plugins:
-                # head
-                check_plugin = requests.get(
-                    f'{base_url}repos/{plugins}/releases/tags/{head}', headers=headers)
-
-                if check_plugin.status_code == 200:
-                    print(
-                        f'The EDC plugin {plugins} has the release {head}')
-                    edcplugin_name = plugins
-
-                    check_plugin_json = check_plugin.json()
-
-                    release_body = check_plugin_json.get('body', '')
-                    plugin_release_id = check_plugin_json.get("id")
-
-                    id_pattern = '\\d+'
-                    plugin_release_url_pattern = f'{base_jira}/projects/{plugins}/versions/{id_pattern}'
-
-                    match_release = re.search(
-                        plugin_release_url_pattern, release_body)
-
-                    if match_release:
-                        print(
-                            f'Found release url in {plugins} {match_release.group()}')
-                        edc_plugin_data.append(match_release.group())
-                        payload_git = 1
-                    else:
-                        print(f'No match found')
-
-                    break
-                else:
-                    print(
-                        f'The EDC plugin {plugins} does not have the release {head}')
-
         elif repo_name == f'LIMS':
             v_name = f'Version {head}'
             print(f'Version name in Jira is {v_name}')
             output_release.append("lims.atrihub.org")
             output_release.append("lims-test-1.atrihub.org")
-            print(f'The repo is LIMS, no plugins')
 
         else:
             v_name = f'Version{head}'
@@ -213,7 +170,6 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token, jira_user, fresh
             output_release.append("trc.atrihub.org")
             output_release.append("trcds-test-1.atrihub.org")
             output_release.append("trcds.atrihub.org")
-            print(f'The repo is {repo_name}, no plugins')
 
         output_release_str = "\n".join(output_release)
 
@@ -244,10 +200,10 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token, jira_user, fresh
     except:
         print(f'Commit messages grabbed, no action required')
 
-    # check and create pr if base branch is main, switch main_yb with main_django_3_2
+    # check and create pr if base branch is main, switch main_yb with main_3_2
     try:
 
-        if branch == 'main_django_3_2':
+        if branch == 'main_yb':
             # print(base_url+create_pr_api)
             create_pr = requests.post(
                 base_url+create_pr_api, headers=headers, json=payload)
@@ -307,10 +263,10 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token, jira_user, fresh
 
     # Create Jira release and add release url to github release below
     try:
-        if branch == 'main_django_3_2':
-            version_name = f'{v_name}45'
+        if branch == 'main_yb':
+            version_name = f'{v_name}38'
             # today = str(date.today())
-            print(f'{head} and main_django_3_2 merged, creating Jira Release now....')
+            print(f'{head} and main_yb merged, creating Jira Release now....')
             print(
                 f'Project id is {int(proj_id[0])} and type is {type(int(proj_id[0]))}')
             payload_version = json.dumps({
@@ -374,29 +330,11 @@ def pr_create(repo, token, branch, owner, head, pr, jira_token, jira_user, fresh
                               'JIRA-key': j_key, 'Description': desc, 'Type': j_type, 'Release': version_name})  # dataframe
             df_str = tabulate(df, headers='keys',
                               tablefmt='github', showindex=False)
-            print(f'{head} and main_django_3_2 merged, creating Github Release')
+            print(f'{head} and main_yb merged, creating Github Release')
             set_upd = "\n".join(f"- {line}" for line in messageset)
-            if payload_git == 0:
-                payload_release = {f"tag_name": f"{head}",
-                                   f"name": f"Version {head}",
-                                   f"body": f"{summary}\n{set_upd}{g_release}\n{j_release}\n{release_url}\n\n{j_issue}\n{df_str}\n{release_to}\n{output_release_str}"}
-            else:
-                payload_release = {f"tag_name": f"{head}",
-                                   f"name": f"Version {head}",
-                                   f"body": f"{summary}\n{set_upd}{g_release}\n{j_release}\n{release_url}\n{edc_plugin_data[0]}\n\n{j_issue}\n{df_str}\n{release_to}\n{output_release_str}"}
-
-                # Update Release notes for plugins
-                payload_plugin = {
-                    f'body': f'{release_url}'
-                }
-                plugin_release_update = requests.patch(
-                    f'{base_url}{create_release_api}/{plugin_release_id}', headers=headers, json=payload_plugin)
-
-                if plugin_release_update.status_code == 200:
-                    print(
-                        f'{edcplugin_name} release updated with {repo_name} release url')
-                else:
-                    print(f'{edcplugin_name} release was not updated with {repo_name} release url, {plugin_release_update.status_code}, {plugin_release_update.content} ')
+            payload_release = {f"tag_name": f"{head}",
+                               f"name": f"Version {head}",
+                               f"body": f"{summary}\n{set_upd}{g_release}\n{j_release}\n{release_url}\n\n{j_issue}\n{df_str}\n{release_to}\n{output_release_str}"}
 
             # Check here for GitHub Release
             check_git_release = requests.get(
