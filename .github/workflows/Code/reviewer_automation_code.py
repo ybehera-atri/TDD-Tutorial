@@ -27,7 +27,7 @@ def check_update_reviewer(repo, pr, token, branch_name, pruser, head):
                f"Accept": f"application/vnd.github+json"}
 
     # mandatory reviewers
-    reviewer_list = ["bruschiusc"]
+    reviewer_list = ["bruschiusc","muneeb-atri"]
 
     list_new = []
     all_matches = set()
