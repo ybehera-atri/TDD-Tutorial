@@ -24,11 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest
-        pip install requests
-        pip install pandas
-        pip install tabulate
-        if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
+        pip install -r requirements.txt
 
     - name: Trigger PR to main_3_2_deployment & Create Release
       env:

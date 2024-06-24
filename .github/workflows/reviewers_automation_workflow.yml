@@ -21,10 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest
-        pip install requests
-        pip install pandas
-        if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
+        pip install -r requirements.txt
 
     - name: Reviewer check
       env:
